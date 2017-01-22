@@ -1,7 +1,7 @@
 (in-package :robot)
 
 (defparameter *user-table* (make-hash-table :test 'equal))
-(defparameter *active-users* (make-hash-table :test 'equal)) ; (user irc-user host)
+(defparameter *active-users* (make-hash-table :test 'equal))
 
 (defun register-user (message &key (privileges :user))
   (with-slots (connection source user host arguments) message
@@ -9,8 +9,11 @@
 	  (user-info (gethash source *user-table*)))
       (if (not user-info)
 	  (progn
-	    (setf (gethash source *user-table*) (list hashed-password privileges))
-	    (privmsg connection source "[AUTH] Registration succeeded."))
+	    (setf (gethash source *user-table*) (list hashed-password
+						      (if (zerop (hash-table-count *user-table*))
+							  :admin
+							  :user)))
+	    (privmsg connection source "[AUTH] Registration succeeded. Log in with !login <password>."))
 	  (privmsg connection source "[AUTH] Registration failed. It is possible this nickname is already registered.")))))
 
 (defun hash-string-password (password)
@@ -29,7 +32,7 @@
 			 (gethash source *active-users*)
 			 :test #'string-equal)
 		(privmsg connection source (format nil "[AUTH] Logged in as user: ~a." source)))
-	 (privmsg connection source (format nil "[AUTH] Could not login user: ~a" source))))))
+	 (privmsg connection source (format nil "[AUTH] Could not log in user: ~a" source))))))
 
 (defun logout (message)
   (with-slots (connection source user host) message

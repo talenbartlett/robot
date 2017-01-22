@@ -2,9 +2,8 @@
 
 (in-package #:robot)
 
-(defparameter *nick-prefixes* (loop for a = (char-code #\a)
-				 for n upto 30
-				 collect (code-char (+ a n))))
+(defparameter *nick-prefixes* (loop for a from (char-code #\A) to (char-code #\z)
+				 collect (code-char a)))
 
 (defvar *message-chance* 1)
 (defvar *speaking* nil)
@@ -32,4 +31,3 @@
     (read-message-loop connection)
     (save-topic-file)
     (save-user-file)))
-

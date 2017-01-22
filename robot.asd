@@ -4,7 +4,7 @@
   :serial t
   :description "IRC bot"
   :author "tjb"
-  :license "Public Domain"
+  :license "MIT"
   :components ((:file "package")
                (:file "robot")
 	       (:file "utility")
