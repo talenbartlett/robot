@@ -33,10 +33,10 @@
     (let* ((active-user-info (gethash source *active-users*))
 	   (irc-user (first active-user-info))
 	   (irc-host (second active-user-info)))
-      (if (and (not (null active-user-info))
-		 (and (string= user irc-user)
-		      (string= host irc-host))
-		 (eq (second (gethash source *user-table*)) :admin))
+      (if (and active-user-info
+		(and (string= user irc-user)
+		     (string= host irc-host))
+		(eq (second (gethash source *user-table*)) :admin))
 	(quit connection "Quitting.")
 	(say message "Access Denied.")))))
 

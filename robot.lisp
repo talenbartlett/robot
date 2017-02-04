@@ -24,7 +24,7 @@
     
     (dolist (channel channels)
       (join connection channel))
-
+    
     (read-user-file)    
     (read-topic-file)
     (load-custom-hooks connection)    
