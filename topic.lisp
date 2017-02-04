@@ -9,7 +9,8 @@
 	    (format nil "~a" (gethash (destination message) *last-topic-table*)))))
 
 (defun save-topic (channel topic)
-  (pushnew topic (gethash channel *topics-table*) :test #'string-equal))
+  (pushnew topic (gethash channel *topics-table*) :test #'string-equal)
+  (save-topic-file))
 
 (defun random-topic (message)
   (with-slots (connection arguments) message

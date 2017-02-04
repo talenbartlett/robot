@@ -57,8 +57,7 @@
     (nick connection (make-nick))))
 
 (defmethod custom-hook ((message irc-privmsg-message))
-  (with-slots (connection) message
-    (search-command message)))
+  (search-command-table message))
 
 (defmethod custom-hook ((message irc-topic-message))
   (with-slots (arguments connection) message

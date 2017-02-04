@@ -52,7 +52,8 @@
 	  (privmsg connection source "[AUTH] Access Denied.")))))
 
 (defun authorized-p (nick)
-  (eq (second (gethash nick *user-table*)) :admin))
+  (and (eq (second (gethash nick *user-table*)) :admin)
+       (gethash nick *active-users*)))
 
 (defun read-user-file ()
   (let ((table (read-table "users")))

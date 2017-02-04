@@ -43,15 +43,13 @@
      when (subsetp fragment key :test #'string-equal) collect key))
 
 (defun random-match (matches)
-  (if (null matches) 
-      nil
+  (if matches 
       (nth (random (length matches)) matches)))
 
 (defun random-value (key table)
   (let ((hash (gethash key table)))
-    (if (null (and key
-		  hash)) 
-	nil
+    (if (and key
+	     hash) 
 	(list (nth (random (length hash)) hash)))))
 
 (defun response-sentence (fragment &key (table *dictionary*))
