@@ -5,9 +5,8 @@
 (defparameter *nick-prefixes* (loop for a from (char-code #\A) to (char-code #\z)
 				 collect (code-char a)))
 
-(defvar *message-chance* 1)
-(defvar *speaking* nil)
-(defvar *train* nil)
+(defparameter *speaking* t)
+(defparameter *training* nil)
 
 (defun threaded-connection (ip &key (nick (make-nick)) (port :default) (ssl :none) (channels nil))
   (make-thread (lambda () (make-bot ip :port port :ssl ssl :channels channels))
@@ -20,14 +19,18 @@
 			     :nickname nick
 			     :port port
 			     :connection-security ssl
-			     :username nick)))
+			     :username "bot")))
     
     (dolist (channel channels)
       (join connection channel))
     
     (read-user-file)    
     (read-topic-file)
+    (read-dictionary)
+    (read-banned-words)
     (load-custom-hooks connection)    
     (read-message-loop connection)
+    (save-banned-words)
+    (save-dictionary)
     (save-topic-file)
     (save-user-file)))

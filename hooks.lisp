@@ -41,7 +41,6 @@
 
 (defmethod custom-hook ((message irc-kill-message))
   (with-slots (connection) message
-    (cleanup-connection connection)
     (make-bot (server-name connection)
 	      :nick (nickname (user connection))
 	      :channels (channels connection))))
@@ -57,7 +56,9 @@
     (nick connection (make-nick))))
 
 (defmethod custom-hook ((message irc-privmsg-message))
-  (search-command-table message))
+  (unless (or (search-command-table message)
+	      (self-message-p message))
+    (speak message)))
 
 (defmethod custom-hook ((message irc-topic-message))
   (with-slots (arguments connection) message
