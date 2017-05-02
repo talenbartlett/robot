@@ -14,5 +14,6 @@
 	       (:file "topic")
 	       (:file "auth")
 	       (:file "game")
-	       (:file "math"))
+	       (:file "math")
+	       (:file "web"))
   :depends-on (:cl-irc :alexandria :bordeaux-threads :cl-ppcre :cl+ssl :ironclad))

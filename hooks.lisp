@@ -63,7 +63,7 @@
 (defmethod custom-hook ((message irc-topic-message))
   (with-slots (arguments connection) message
     (let ((channel (find-channel connection (first arguments))))
-      (when channel
+      (when (and channel (topic channel))
 	(save-topic (first arguments) (topic channel)))))) 
       
 #|

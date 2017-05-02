@@ -11,6 +11,7 @@
 		(new-base (parse-integer (second command-args)
 					 :junk-allowed t)))
 	    (say message (write-to-string number
-					  :base (if (and (>= new-base 2)
+					  :base (if (and (numberp new-base)
+						         (>= new-base 2)
 							 (<= new-base 36))
 						    new-base 10)))))))))

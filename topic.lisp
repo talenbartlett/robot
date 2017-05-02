@@ -8,9 +8,12 @@
    (with-slots (connection arguments) message
      (let* ((channel (find-channel connection
 				   (first arguments)))
+	    (command-args (command-arguments arguments))
 	    (topic-list (gethash (first arguments) *topics-table*)))
        (unless (null topic-list)
-	 (topic- connection channel (elt topic-list (random (length topic-list)))))))))
+	 (if (null command-args)
+	     (topic- connection channel (elt topic-list (random (length topic-list))))
+	     (topic- connection channel (format nil "~{~a~^ ~}" command-args))))))))
 
 (defun last-topic (message)
   (with-slots (connection arguments) message

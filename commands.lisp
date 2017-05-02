@@ -15,8 +15,10 @@
   (lambda (message)
     (with-slots (connection arguments) message
       (let ((command-args (command-arguments arguments)))
-	(nick connection
-	      (first command-args))))))
+	(if (null command-args)
+	    (nick connection (make-nick))
+	    (nick connection
+		  (first command-args)))))))
 
 (defcommand quit :admin
     "Disconnect the bot from the server."
