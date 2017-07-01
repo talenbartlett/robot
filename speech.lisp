@@ -1,7 +1,6 @@
 (in-package :robot)
 
 (defparameter *dictionary* (make-hash-table :test #'equal))
-(defparameter *banned-words* nil)
 
 (defun save-dictionary ()
   (save-table "dictionary" *dictionary*))
@@ -10,11 +9,11 @@
   (let ((table (read-table "dictionary")))
     (when table
       (setf *dictionary* table))))
-  
-(defun read-banned-words ()
-  (let ((table (read-table "banned-words")))
-    (when table
-      (setf *banned-words* table))))
+
+(defun say (message text)
+  (privmsg (connection message)
+	   (destination message)
+	   text))
 
 (defcommand speak :user
     "Allow the bot to speak. !speak"

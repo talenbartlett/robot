@@ -8,7 +8,7 @@
   (lambda (message)
     (with-slots (connection source user host arguments) message
       (let* ((user-input-list (split-whitespace (second arguments)))
-	     (hashed-password (hash-string-password (second user-input-list)))
+	     (hashed-password (hash-password-string (second user-input-list)))
 	     (user-info (gethash source *user-table*)))
 	(if (not user-info)
 	    (progn
@@ -20,7 +20,7 @@
 	      (privmsg connection source "[AUTH] Registration succeeded. Log in with !login <password>."))
 	    (privmsg connection source "[AUTH] Registration failed. It is possible this nickname is already registered."))))))
 
-(defun hash-string-password (password)
+(defun hash-password-string (password)
   (when password
     (pbkdf2-hash-password-to-combined-string
      (ascii-string-to-byte-array password))))
@@ -31,8 +31,7 @@
       (with-slots (connection source user host arguments) message
 	(let* ((user-input-list (split-whitespace (second arguments)))
 	       (user-info (gethash source *user-table*))
-	       (bot-pass (second user-input-list))
-	       (hashed-password (hash-string-password bot-pass)))
+	       (bot-pass (second user-input-list)))
 	  (if (and
 	       user-info
 	       bot-pass

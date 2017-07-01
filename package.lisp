@@ -5,7 +5,10 @@
 	#:cl-irc
 	#:alexandria
 	#:bordeaux-threads
-	#:cl-ppcre)
+	#:cl-ppcre
+	#:drakma
+	#:yason
+	#:flexi-streams)
   (:import-from :ironclad :pbkdf2-hash-password-to-combined-string
 		:ascii-string-to-byte-array
 		:pbkdf2-check-password)

@@ -6,6 +6,7 @@
   :author "tjb"
   :license "MIT"
   :components ((:file "package")
+	       (:file "config")
 	       (:file "commands")
                (:file "robot")
 	       (:file "utility")
@@ -15,5 +16,13 @@
 	       (:file "auth")
 	       (:file "game")
 	       (:file "math")
-	       (:file "web"))
-  :depends-on (:cl-irc :alexandria :bordeaux-threads :cl-ppcre :cl+ssl :ironclad))
+	       (:file "web")
+	       (:file "memo"))
+  :depends-on (:cl-irc
+	       :alexandria
+	       :bordeaux-threads
+	       :cl-ppcre
+	       :cl+ssl
+	       :ironclad
+	       :drakma
+	       :yason))

@@ -2,14 +2,8 @@
 
 (in-package #:robot)
 
-(defparameter *nick-prefixes* (loop for a from (char-code #\A) to (char-code #\z)
-				 collect (code-char a)))
-
-(defparameter *speaking* t)
-(defparameter *training* nil)
-
 (defun threaded-connection (ip &key (nick (make-nick)) (port :default) (ssl :none) (channels nil))
-  (make-thread (lambda () (make-bot ip :port port :ssl ssl :channels channels))
+  (make-thread (lambda () (make-bot ip :nick nick :port port :ssl ssl :channels channels))
 	       :name (format nil "~a-thread" nick)))
 
 (defun make-bot (ip &key (nick (make-nick)) (port :default) (ssl :none) (channels nil) (logging-stream nil))
@@ -27,10 +21,8 @@
     (read-user-file)    
     (read-topic-file)
     (read-dictionary)
-    (read-banned-words)
     (load-custom-hooks connection)    
     (read-message-loop connection)
-    (save-banned-words)
     (save-dictionary)
     (save-topic-file)
     (save-user-file)))

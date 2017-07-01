@@ -15,12 +15,16 @@
 (defgeneric load-custom-hooks (connection)
   (:documentation "Load list of user-defined hooks to CONNECTION."))
 
-#|
-(defhook (intern "irc-join-message")
-    (unless (self-message-p message)
-      (with-slots (source arguments) message
-	(say message (format nil "Welcome to ~a, ~a." (first arguments) source)))))
-|#
+;(defhook (intern "irc-join-message")
+;    (unless (self-message-p message)
+;      (with-slots (source arguments) message
+;	(say message (format nil "Welcome to ~a, ~a." (first arguments) source)))))
+
+(defmethod custom-hook ((message irc-nick-message))
+  (unless (or (self-message-p message)
+	      (not (authorized-p (source message))))
+    (let ((active-user-info (gethash source *active-users*)))
+      )))
 
 (defmethod custom-hook ((message irc-join-message))
   (unless (self-message-p message)
@@ -56,9 +60,13 @@
     (nick connection (make-nick))))
 
 (defmethod custom-hook ((message irc-privmsg-message))
-  (unless (or (search-command-table message)
-	      (self-message-p message))
-    (speak message)))
+  (unless (self-message-p message)
+    (with-slots (source) message
+     (search-command-table message)
+     (speak message)
+     (when (gethash source *pounce-list*)
+       (say message (format nil "~a: You have ~a memos." source (gethash source *pounce-list*)))
+       (remhash source *pounce-list*)))))
 
 (defmethod custom-hook ((message irc-topic-message))
   (with-slots (arguments connection) message
@@ -66,12 +74,10 @@
       (when (and channel (topic channel))
 	(save-topic (first arguments) (topic channel)))))) 
       
-#|
-(defmethod custom-hook ((message irc-rpl_isupport-message))
-  (let ((server-options (make-hash-table)))
-    (split-whitespace message)))
-|#
 
+;(defmethod custom-hook ((message irc-rpl_isupport-message))
+;  (let ((server-options (make-hash-table)))
+;    (split-whitespace message)))
 
 (defmethod load-custom-hooks ((connection connection))
   (remove-all-hooks connection)
