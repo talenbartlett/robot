@@ -22,9 +22,8 @@
 							       (if (null memo-list)
 								   (privmsg connection source "You don't have any memos.")
 								   (progn (dolist (memo (gethash source *memo-table*))
-									    (multiple-value-bind (s m h date mo yr day) (decode-universal-time (second memo))
-									      (declare (ignore _))
-									      (privmsg connection source
-										       (format nil "Sent on ~a:~a:~a (GMT), ~a/~a/~a by ~a: ~a" h m s mo day yr (first memo) (third memo))))) 
+									    (multiple-value-bind (s m h day mo yr day-of-week) (decode-universal-time (second memo))
+                                                                              (privmsg connection source
+										       (format nil "Sent on ~a:~2,'0D:~2,'0D (GMT), ~a/~a/~a by ~a: ~a" h m s mo day yr (first memo) (third memo)))))
 									  (remhash source *memo-table*)))))
 	     (t (privmsg connection source (format nil "!memo {send <user> <message> | receive}"))))))))
