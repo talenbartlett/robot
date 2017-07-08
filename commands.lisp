@@ -58,6 +58,28 @@
 	(say message
 	     (format nil "~{~a~^ ~}" reversed-args))))))
 
+(defcommand part :admin
+    "Part the channel."
+  (lambda (message)
+    (with-slots (connection arguments) message
+      (let ((command-args (command-arguments arguments)))
+        (if (null command-args)
+            (part-all connection)
+            (part connection (first command-args)))))))
+
+(defcommand rules :user
+    "List the rules of the channel."
+  (lambda (message)
+    (with-slots (connection arguments) message
+      (let* ((channel (first arguments))
+             (rules (gethash channel *rules*)))
+        (if rules
+            (progn
+              (say message (format nil "Rules for ~a:" channel))
+              (dolist (rule rules)
+                (say message (format nil "* ~a" rule))))
+            (say message (format nil "~a has no rules." channel)))))))
+
 (defun search-command-table (message)
   (with-slots (connection source arguments) message
     (let* ((user-input (second arguments))

@@ -17,7 +17,9 @@
 	       (:file "game")
 	       (:file "math")
 	       (:file "web")
-	       (:file "memo"))
+	       (:file "memo")
+               (:file "vote")
+               (:file "variables"))
   :depends-on (:cl-irc
 	       :alexandria
 	       :bordeaux-threads

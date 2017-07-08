@@ -73,7 +73,9 @@
     (let ((channel (find-channel connection (first arguments))))
       (when (and channel (topic channel))
 	(save-topic (first arguments) (topic channel)))))) 
-      
+
+(defmethod custom-hook ((message irc-err_chanoprivsneeded-message))
+  (say message (format nil "I require channel operator privileges.")))
 
 ;(defmethod custom-hook ((message irc-rpl_isupport-message))
 ;  (let ((server-options (make-hash-table)))
@@ -89,5 +91,6 @@
 		     irc-kick-message
 		     irc-err_nicknameinuse-message
 		     irc-privmsg-message
-		     irc-topic-message))
+		     irc-topic-message
+                     irc-err_chanoprivsneeded-message))
     (add-hook connection message #'custom-hook)))
