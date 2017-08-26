@@ -1,6 +1,6 @@
 (in-package :robot)
 
-(defparameter *dictionary* (make-hash-table :test #'equal))
+(defparameter *dictionary* (make-hash-table :test #'equalp))
 
 (defun save-dictionary ()
   (save-table "dictionary" *dictionary*))
@@ -52,7 +52,7 @@
     (with-slots (arguments) message
       (let* ((command-args (command-arguments arguments))
 	     (query-result (gethash command-args *dictionary*)))
-	(say message (format nil "Result for ~a: ~a" command-args query-result))))))
+	(say message (format nil "Result for ~a: ~{~a~^, ~}" command-args query-result))))))
 
 (defun speak (message)
   (when *speaking*

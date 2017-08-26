@@ -16,7 +16,9 @@
 	  (loop for table in (gethash "features" data)
 	     when (string-equal (gethash "id" (gethash "properties" table))
 				(first command-args))
-	     do (say message (gethash "rawOb" (gethash "properties" table)))))))))
+	     do (let ((properties (gethash "properties" table)))
+                  (say message (format nil "METAR for: ~a (~a)" (gethash "site" properties) (gethash "id" properties)))
+                  (say message (gethash "rawOb" properties)))))))))
 
 (defun get-metar (&optional (url *metar-url*))
   (when url
